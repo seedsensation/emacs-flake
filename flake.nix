@@ -1,5 +1,5 @@
 {
-  description = "Emacs Flake";
+  description = "Custom Emacs Flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -28,7 +28,7 @@
       {
         default =
           let
-            binName = "Emacs With Packages";
+            binName = "Emacs-Flake";
             dependencies = with pkgs; [
 
               ((pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages ( epkgs:
@@ -93,7 +93,7 @@
             ];
           in
           pkgs.stdenv.mkDerivation {
-            name = "Emacs With Packages";
+            name = "Emacs-Flake";
             src = self;
 
             buildInputs = dependencies;
@@ -103,10 +103,10 @@
             installPhase = ''
 pwd
 ls
-mkdir emacs
-cp *.el emacs
-cp *.elc emacs
-cp -r lisp emacs/lisp
+mkdir $out
+cp *.el $out
+cp *.elc $out
+cp -r lisp $out/lisp
             '';
 
 

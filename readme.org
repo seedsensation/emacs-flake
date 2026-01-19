@@ -3,7 +3,7 @@
 * Variables
 First, we'll set some basic variables.
 #+begin_src elisp
-  :lexical-binding t
+  ;; -*- lexical-binding: t; -*-
   (setq custom-file "~/.emacs-customizations.el"
   	)
 #+end_src
