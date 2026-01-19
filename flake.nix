@@ -98,10 +98,15 @@
 
             buildInputs = dependencies;
             buildPhase = ''
-              emacs -Q --batch -l './lisp/compile.el'
+              make compile
             '';
             installPhase = ''
-              touch ~/.emacs-customizations.el
+pwd
+ls
+mkdir emacs
+cp *.el emacs
+cp *.elc emacs
+cp -r lisp emacs/lisp
             '';
 
 
