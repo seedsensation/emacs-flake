@@ -1,0 +1,7 @@
+#+title: Emacs Config
+
+* Variables
+First, we'll set some basic variables.
+#+begin_src elisp
+(setq custom-file "~/.emacs-customizations.el")
+#+end_src
