@@ -28,7 +28,7 @@
       {
         default =
           let
-            binName = "Emacs-Flake";
+            binName = "emacs-flake";
             dependencies = with pkgs; [
 
               ((pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages ( epkgs:
