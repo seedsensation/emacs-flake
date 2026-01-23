@@ -1,12 +1,32 @@
 #+title: Emacs Config
 #+PROPERTY: header-args :tangle yes
-* Initial Setup
+* Initial Configuration
 ** Lexical Bindings
 #+begin_src elisp
 ;; -*- lexical-binding: t; -*-
 #+end_src
 
 This has to be the first line of the file.
+
+** Basic Configs
+We'll set some basic configs here - relative line numbers, silencing sound effects and some basic setup for autocomplete:
+#+begin_src elisp
+  (setq display-line-numbers 'relative
+        ring-bell-function 'ignore
+        display-line-numbers 'relative
+
+        read-file-name-completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        completion-ignore-case t
+        completion-styles '(basic substring partial-completion flex))
+#+end_src
+
+I will also set my own home directory here - change this if you're anyone else using my configs.
+#+begin_src elisp
+    (setq my-user-directory "/home/mercury")
+#+end_src
+
+
 
 * File System Setup
 ** Repository Location
@@ -20,69 +40,191 @@ If it's just pulled straight from the flake, leave it as nil.
 #+end_src
 
 ** Customization File
-Our customisations are stored in ~\~/.emacs-customizations.el~.
+Our customisations are stored in =\~/.emacs.d/custom.el=.
 To use them properly, every time Emacs launches, we check between our local customisations file and the one stored in the home file.
 
 If the locally stored file is newer than the one in the git repository, copy the new one to git.
 Otherwise, if the customizations file doesn't exist locally, copy it from git.
 
   #+begin_src elisp
+    (setq custom-file "~/.emacs.d/custom.el")
+
     (let ((dir (if emacs-flake-dir emacs-flake-dir "./")))
       (if (or
-           (file-newer-than-file-p (expand-file-name "emacs-customizations.el" dir)
-        			       "~/.emacs-customizations.el")
-           (not (file-exists-p "~/.emacs-customizations.el")))
-          (copy-file (expand-file-name "emacs-customizations.el" dir) "~/.emacs-customizations.el" t)
-        (when (not (file-exists-p "~/.emacs-customizations.el"))
-          (copy-file "~/.emacs-customizations.el" (expand-file-name "emacs-customizations.el" dir) t))))
+           (file-newer-than-file-p (expand-file-name "custom.el" dir)
+          			       "~/.emacs.d/custom.el")
+           (not (file-exists-p "~/.emacs.d/custom.el")))
+          (copy-file (expand-file-name "emacs-customizations.el" dir) "~/.emacs.d/custom.el" t)
+        (when (not (file-exists-p "~/.emacs.d/custom.el"))
+          (copy-file "~/.emacs.d/custom.el" (expand-file-name "custom.el" dir) t))))
+    (load "~/.emacs.d/custom.el")
 #+end_src
 
-* Variables
-Next, we'll set some basic variables.
-
-** Custom File
-We set the customization file to [[*File System Setup][the one that we set up earlier]]:
+* Appearance
+** Theme
+Set the theme to Gruvbox.
 #+begin_src elisp
-  (setq custom-file "~/.emacs-customizations.el")
-#+end_src
-
-** Basic Configs
-We'll set some basic configs here - relative line numbers, silencing sound effects and some basic setup for autocomplete:
-#+begin_src elisp
-  (setq display-line-numbers 'relative
-        ring-bell-function 'ignore
-
-        read-file-name-completion-ignore-case t
-        read-buffer-completion-ignore-case t
-        completion-ignore-case t
-        completion-styles '(basic substring partial-completion flex))
-#+end_src
-
-** Org Configs
-Next is basic setup for org mode:
-#+begin_src elisp
-  (setq org-preview-latex-default-process 'dvipng
-        org-roam-directory (file-truename "~/org")
-        org-id-locations-file (expand-file-name ".org-id-locations" org-roam-directory)
-        org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
+(load-theme 'gruvbox t)
 #+end_src
 
 * Modes
 We set all of the basic modes, of course.
 #+begin_src elisp
-(evil-mode 1)
-(vertico-mode 1)
-(ivy-mode 1)
-(ivy-prescient-mode 1)
-(org-roam-db-autosync-mode 1)
-(menu-bar-mode 0)
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
+  (evil-mode 1)
+  (vertico-mode 1)
+  (ivy-mode 1)
+  (ivy-prescient-mode 1)
+  (org-roam-db-autosync-mode 1)
+  (menu-bar-mode 0)
+  (tool-bar-mode 0)
+  (scroll-bar-mode 0)
 #+end_src
 
-* Keybinds
-Now for the fun part.
+** Evil
+*** Undo System
+Set the undo system for =evil-mode=.
+#+begin_src elisp
+  (evil-set-undo-system 'undo-redo)
+#+end_src
 
+** Org
+Next is basic setup for org mode:
+#+begin_src elisp
+  (setq org-roam-directory (file-truename "~/org")
+        org-id-locations-file (expand-file-name ".org-id-locations" org-roam-directory)
+        org-roam-db-location (expand-file-name "org-roam.db" org-roam-directory))
+#+end_src
+
+*** Org Latex Previews
+Set the process for generating previews:
+#+begin_src elisp
+  (setq org-preview-latex-default-process 'dvipng)
+#+end_src
+
+* Hooks
+** Org Mode
+Enable additional minor modes for =org-mode=.
+#+begin_src elisp
+  (defun org-mode-enable ()
+    (define-key evil-normal-state-local-map
+  	      (kbd "TAB") 'org-cycle)
+    (org-fragtog-mode 1)
+    (org-indent-mode 1)
+    (org-roam-db-autosync-mode)
+    )
+  (add-hook 'org-mode-hook 'org-mode-enable)
+#+end_src
+
+** Prog Mode
+This hook enables line numbers, formatting and autocomplete in all programming buffers.
+#+begin_src elisp
+  (defun prog-mode-enable ()
+    (display-line-numbers-mode 1)
+    (format-all-mode)
+    (toggle-truncate-lines 1)
+    (company-mode))
+  (add-hook 'prog-mode-hook 'prog-mode-enable)
+#+end_src
+** LSP Auto-Enable
+We want LSP mode to be enabled for every mode that it supports, but /not/ enabled for modes that it doesn't support.
+
+To do that, I've created a hook specifically for modes that we want to enable LSP mode for. 
+
+#+begin_src elisp
+  ;; Define the hook
+  (defvar lsp-enable-hook nil "Hook to enable LSP mode for specific hooks")
+
+  ;; Add specific hooks to lsp-enable-hook
+  (dolist (p (list
+  	    ;; LIST THE HOOKS FOR LSP-MODE HERE
+  	    'java-mode-hook
+  	    'python-mode-hook
+  	    'rustic-mode-hook
+  	    'nxml-mode-hook
+  	    ))
+    (add-hook 'lsp-enable-hook p)
+    t
+  )
+
+  ;; Enable LSP mode when this hook is active
+  (defun lsp-enable-hook-activate ()
+    (lsp-ui-mode)
+    (lsp-mode))
+  (add-hook 'lsp-enable-hook 'lsp-enable-hook-activate)
+#+end_src
+
+** Text Mode
+Enable =visual-line-mode= for all text buffers.
+#+begin_src elisp
+(add-hook 'text-mode-hook 'visual-line-mode)
+#+end_src
+* Additional Functions
+** Hide Drawers
+This hides the drawers under every heading in Org Mode.
+These are used for the =SPC m h= command in the [[*Org Mode Map][org-mode map]].
+#+begin_src elisp
+(defun org-cycle-hide-drawers (state)
+  "Re-hide all drawers after a visibility state change."
+  (when (and (derived-mode-p 'org-mode)
+	     (not (memq state '(overview folded contents))))
+    (save-excursion
+      (let* ((globalp (memq state '(contents all)))
+	     (beg (if globalp
+		      (point-min)
+		    (point)))
+	     (end (if globalp
+		      (point-max)
+		    (if (eq state 'children)
+			(save-excursion
+			  (outline-next-heading)
+			  (point))
+		      (org-end-of-subtree t)))))
+	(goto-char beg)
+	(while (re-search-forward org-drawer-regexp end t)
+	  (save-excursion
+	    (beginning-of-line 1)
+	    (when (looking-at org-drawer-regexp)
+	      (let* ((start (1- (match-beginning 0)))
+		     (limit
+		      (save-excursion
+			(outline-next-heading)
+			(point)))
+		     (msg (format
+			   (concat
+			    "org-cycle-hide-drawers:  "
+			    "`:END:`"
+			    " line missing at position %s")
+			   (1+ start))))
+		(if (re-search-forward "^[ \t]*:END:" limit t)
+		    (outline-flag-region start (line-end-position) t)
+		                    (user-error msg))))))))))
+
+#+end_src
+
+** Window Controls
+These functions are used for the =SPC v= and =SPC h= commands in the [[*Window Map][Window Map]].
+
+#+begin_src elisp
+(defun +evil/window-split-and-follow()
+  "Split current window horizontally, then focus on new window.
+   If `evil-split-window-below` is non-nil, the new window isn't focused."
+  (interactive)
+  (let ((evil-split-window-below (not evil-split-window-below)))
+    (call-interactively #'evil-window-split)))
+
+(defun +evil/window-vsplit-and-follow()
+  "Split current window vertically, then focus on new window.
+   If `evil-split-window-below` is non-nil, the new window isn't focused."
+  (interactive)
+  (let ((evil-vsplit-window-right (not evil-vsplit-window-right)))
+    (call-interactively #'evil-window-vsplit)))
+
+#+end_src
+
+
+
+
+* Keybinds
 ** Maps
 *** Window Map
 This map is for moving between windows on the screen.
@@ -119,7 +261,6 @@ This map is for managing viewmodes easily.
 #+begin_src elisp
   (defvar view-map (define-keymap 
   		   "v" #'org-toggle-narrow-to-subtree
-  		   "h" (lambda() (interactive) (org-cycle-hide-drawers 'all))
   		   "l" #'lsp-describe-at-point
   		   ))
 #+end_src
@@ -212,4 +353,18 @@ into:
 #+end_src
 which makes this a LOT easier to organise.
 
-*** Org Mode
+*** Org Mode Map
+Set keybinds for org mode - primarily just commands I use a lot.
+
+#+begin_src elisp
+(set-local-leader-map org-mode-map
+		      (define-keymap
+			"." #'consult-org-heading
+			"b" #'org-mark-ring-goto
+			"f" #'org-roam-node-find
+			"i" #'org-roam-node-insert
+			"l i" #'org-id-get-create
+			"r" #'org-id-reload-all
+                  "h" (lambda() (interactive) (org-cycle-hide-drawers 'all))
+			))
+#+end_src

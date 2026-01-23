@@ -45,7 +45,6 @@
               pwd
               ls
               mkdir $out
-              cp *.el $out
               cp *.elc $out
               cp -r lisp $out/lisp
             '';
