@@ -10,6 +10,7 @@
    '(:foreground default :background default :scale 2.25 :html-foreground
 		 "Black" :html-background "Transparent" :html-scale
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+ '(org-roam-directory "/home/mercury/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
  '(safe-local-variable-values '((lexical-bindings . t)))
  '(truncate-lines t))
