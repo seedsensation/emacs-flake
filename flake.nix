@@ -46,7 +46,6 @@
               ls
               mkdir $out
               cp *.elc $out
-              cp -r lisp $out/lisp
             '';
 
 

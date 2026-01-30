@@ -77,8 +77,8 @@ Disable line wrapping, please! :)
 * Modes
 We set all of the basic modes, of course.
 #+begin_src elisp
-  (require 'evil)
-  (require 'electric)
+  ;;(require 'evil)
+  ;;(require 'electric)
 
   (evil-mode 1)
   (vertico-mode 1)
