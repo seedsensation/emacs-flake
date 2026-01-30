@@ -433,7 +433,7 @@ Set keybinds for org mode - primarily just commands I use a lot.
 			"f" #'org-roam-node-find
 			"r" #'org-id-reload-all
 			"b" #'org-mark-ring-goto
-			))
+			)
 #+end_src
 
 *** Leader Key
