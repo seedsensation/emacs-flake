@@ -21,8 +21,30 @@
           pkgs = import nixpkgs { inherit system; };
         }
       );
+      default_pkgs = import nixpkgs { system = "x86_64-linux"; };
   in
   {
+    out = let 
+    binName = "emacs-flake";
+    dependencies = with default_pkgs; [ emacs ];
+    in default_pkgs.stdenv.mkDerivation {
+
+            name = "emacs-flake";
+            src = self;
+
+            buildInputs = dependencies;
+            buildPhase = ''
+              make clean compile
+            '';
+            installPhase = ''
+              pwd
+              ls
+              mkdir $out
+              cp *.elc $out
+            '';
+	    };
+
+
     packages = forAllSystems (
       { pkgs }:
       {
@@ -39,13 +61,14 @@
 
             buildInputs = dependencies;
             buildPhase = ''
-              make compile
+              make clean compile
             '';
             installPhase = ''
               pwd
               ls
               mkdir $out
               cp *.elc $out
+	      cp custom.el $out
             '';
 
 
