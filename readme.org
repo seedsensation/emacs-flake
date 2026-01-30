@@ -19,7 +19,7 @@ We'll set some basic configs here - relative line numbers, silencing sound effec
         read-buffer-completion-ignore-case t
         completion-ignore-case t
         completion-styles '(basic substring partial-completion flex))
-        warning-suppress-log-types '((files missing-lexbind-cookie))
+        warning-suppress-log-types '((files missing-lexbind-cookie)))
 #+end_src
 
 
