@@ -13,19 +13,14 @@ We'll set some basic configs here - relative line numbers, silencing sound effec
 #+begin_src elisp
   (setq display-line-numbers 'relative
         ring-bell-function 'ignore
-        display-line-numbers 'relative
+        inhibit-startup-screen t
 
         read-file-name-completion-ignore-case t
         read-buffer-completion-ignore-case t
         completion-ignore-case t
         completion-styles '(basic substring partial-completion flex))
+        warning-suppress-log-types '((files missing-lexbind-cookie))
 #+end_src
-
-I will also set my own home directory here - change this if you're anyone else using my configs.
-#+begin_src elisp
-    (setq my-user-directory "/home/mercury")
-#+end_src
-
 
 
 * File System Setup
@@ -67,17 +62,34 @@ Set the theme to Gruvbox.
 (load-theme 'gruvbox t)
 #+end_src
 
+** Fonts
+Set the default font to Maple Mono.
+#+begin_src elisp
+  (set-face-attribute 'default nil :font "Maple Mono" :height 160)
+#+end_src
+
+** Line Wrapping
+Disable line wrapping, please! :)
+#+begin_src elisp
+  (toggle-truncate-lines 1)
+#+end_src
+
 * Modes
 We set all of the basic modes, of course.
 #+begin_src elisp
+  (require 'evil)
+  (require 'electric)
+
   (evil-mode 1)
   (vertico-mode 1)
   (ivy-mode 1)
   (ivy-prescient-mode 1)
   (org-roam-db-autosync-mode 1)
+  (which-key-mode 1)
   (menu-bar-mode 0)
   (tool-bar-mode 0)
   (scroll-bar-mode 0)
+  (indent-tabs-mode 0)
 #+end_src
 
 ** Evil
@@ -106,8 +118,6 @@ Set the process for generating previews:
 Enable additional minor modes for =org-mode=.
 #+begin_src elisp
   (defun org-mode-enable ()
-    (define-key evil-normal-state-local-map
-  	      (kbd "TAB") 'org-cycle)
     (org-fragtog-mode 1)
     (org-indent-mode 1)
     (org-roam-db-autosync-mode)
@@ -121,36 +131,25 @@ This hook enables line numbers, formatting and autocomplete in all programming b
   (defun prog-mode-enable ()
     (display-line-numbers-mode 1)
     (format-all-mode)
-    (toggle-truncate-lines 1)
     (company-mode))
   (add-hook 'prog-mode-hook 'prog-mode-enable)
 #+end_src
 ** LSP Auto-Enable
 We want LSP mode to be enabled for every mode that it supports, but /not/ enabled for modes that it doesn't support.
 
-To do that, I've created a hook specifically for modes that we want to enable LSP mode for. 
+To do that, I've written a macro that sets multiple hooks to activate =lsp-mode=.
 
 #+begin_src elisp
-  ;; Define the hook
-  (defvar lsp-enable-hook nil "Hook to enable LSP mode for specific hooks")
+  ;; input
+  ;; (lsp-attach-hook 'java-mode-hook 'python-mode-hook)
+  ;;
+  ;; output
+  ;; (add-hook 'java-mode-hook 'lsp-mode)
+  ;; (add-hook 'python-mode-hook 'lsp-mode)
 
-  ;; Add specific hooks to lsp-enable-hook
-  (dolist (p (list
-  	    ;; LIST THE HOOKS FOR LSP-MODE HERE
-  	    'java-mode-hook
-  	    'python-mode-hook
-  	    'rustic-mode-hook
-  	    'nxml-mode-hook
-  	    ))
-    (add-hook 'lsp-enable-hook p)
-    t
-  )
-
-  ;; Enable LSP mode when this hook is active
-  (defun lsp-enable-hook-activate ()
-    (lsp-ui-mode)
-    (lsp-mode))
-  (add-hook 'lsp-enable-hook 'lsp-enable-hook-activate)
+  (defmacro lsp-attach-hook (&rest args)
+    `(progn ,@(mapcar #'(lambda (a) `(add-hook ,a 'lsp-mode)) args) t))
+  (lsp-attach-hook 'java-mode-hook 'lsp-mode-hook)
 #+end_src
 
 ** Text Mode
@@ -223,10 +222,76 @@ These functions are used for the =SPC v= and =SPC h= commands in the [[*Window M
 
 
 
+** Org ID Reload All
+This function reloads all org IDs - good for resyncing the database.
+#+begin_src elisp
+(defun org-id-reload-all ()
+    (interactive)
+    (org-id-update-id-locations)
+    (org-roam-update-org-id-locations)
+    (org-roam-db-sync))
+#+end_src
 
 * Keybinds
 ** Maps
-*** Window Map
+*** Org Mode Map
+This lets us use =TAB= to show/hide contents of headers in Org mode.
+#+begin_src elisp
+  (evil-define-key 'normal org-mode-map (kbd "<TAB>") 'org-cycle)
+#+end_src
+** Global Binds
+*** Navigation
+**** Avy
+We'll set a few global navigation keybinds using *Avy*.
+These allow us to move around files much quicker.
+
+#+begin_src elisp
+(evil-define-key '(list normal motion visual) global-map (kbd "-") 'avy-goto-char)
+(evil-define-key '(list normal motion visual) global-map (kbd "_") 'avy-goto-line)
+#+end_src
+
+**** Marks
+This keybind takes you to the most recent mark:
+#+begin_src elisp
+(evil-define-key 'normal global-map (kbd "=") 'pop-global-mark)
+#+end_src
+
+**** Ace Window
+This sets a keybind accessible everywhere to use Ace Window for navigating between windows.
+#+begin_src elisp
+(keymap-global-set "M-o" 'ace-window)
+#+end_src
+
+**** Electric Buffer List
+This makes the buffer list easily accessible:
+#+begin_src elisp
+  (keymap-global-set "C-x C-<up>" 'electric-buffer-list)
+  (keymap-global-set "C-x C-b" 'electric-buffer-list)
+#+end_src
+
+and we also need a keybind for making sure selection works - however, I've had a few issues in getting this to work.
+
+This function throws an error since ='Electric-buffer-menu-select= doesn't exist at the time the code is run.
+
+#+begin_src elisp :tangle yes
+  (setq electric-buffer-menu-mode-map (make-keymap))
+  (define-key electric-buffer-menu-mode-map (kbd "o") 'Electric-buffer-menu-select)
+#+end_src
+
+The best option seems to be using =use-package= like so:
+  #+begin_src elisp
+  #+end_src
+
+*** Typing
+**** Surround
+This lets us use =S= to surround text while in Visual mode.
+#+begin_src elisp
+(evil-define-key 'visual global-map "S" 'surround-insert)
+#+end_src
+
+*** Leader Maps
+**** Global Leader Maps
+***** Window Map
 This map is for moving between windows on the screen.
 #+begin_src elisp
   (defvar window-map (define-keymap 
@@ -244,28 +309,30 @@ This map is for moving between windows on the screen.
   		     ))
 #+end_src
 
-*** Config Map
+***** Config Map
 This map is for easily accessing config files.
 
 #+begin_src elisp
   (defvar config-map (define-keymap 
   		     "r" (lambda () (interactive) (load "~/nixos/emacs/init.el"))
   		     "h" (lambda () (interactive) (find-file "~/org/contents.org"))
-  		     "c" (lambda () (interactive) (find-file "~/nixos/emacs/init.el"))
-  		     "k" (lambda () (interactive) (find-file "~/nixos/emacs/modules/keybinds.el"))
+  		     "c" (lambda () (interactive) (find-file "~/projects/emacs-flake/readme.org"))
+  		     "k" (lambda () (interactive) (find-file "~/projects/emacs-flake/readme.org"))
+  		     "d" (lambda () (interactive) (dired "./"))
   		     ))
   #+end_src
 
-*** View Map
+***** View Map
 This map is for managing viewmodes easily.
 #+begin_src elisp
   (defvar view-map (define-keymap 
   		   "v" #'org-toggle-narrow-to-subtree
+  		   "h" (lambda() (interactive) (org-cycle-hide-drawers 'all))
   		   "l" #'lsp-describe-at-point
   		   ))
 #+end_src
 
-*** Buffer Map
+***** Buffer Map
 This map is for managing and navigating buffers.
 #+begin_src elisp
 (defvar buffer-map (define-keymap :full t
@@ -275,7 +342,7 @@ This map is for managing and navigating buffers.
 		     ))
 #+end_src
 
-*** Customisation Map
+***** Customisation Map
 This map is for customising variables, faces, etc.
 #+begin_src elisp
 (defvar customize-map (define-keymap
@@ -286,7 +353,25 @@ This map is for customising variables, faces, etc.
 			))
 #+end_src
 
-*** Leader Map
+***** Project Map
+This map is for working with =lsp-mode=, =projectile= and =treemacs=.
+#+begin_src elisp
+  (defvar project-map (define-keymap
+  		      "t" #'treemacs
+  		      "e" (lambda () (interactive) (lsp-treemacs-errors-list))
+  		      "x" #'projectile-compile-project
+  		      "p" (lambda () (interactive)
+  			    (projectile-switch-project))
+  		      "l" #'lsp
+  		      "v" #'vterm
+  		      "s" (lambda () (interactive)
+  			    (lsp-treemacs-errors-list)
+  			    (treemacs)
+  			    (lsp))
+  		      ))
+#+end_src
+
+***** Leader Map
 This map is the most important one - this map appears whenever you press Space while in Evil Mode, and defines every map that you can move to.
 #+begin_src elisp
 (defvar leader-map (define-keymap
@@ -301,70 +386,58 @@ This map is the most important one - this map appears whenever you press Space w
   ))
 #+end_src
 
-** Configuration
-Set the leader map to appear whenever you press =Space= in Normal mode.
+**** Mode Specific Leader Maps
+***** Setup
+*I LOVE MACROS!!!!!*
+
+This macro constructs a way to define keys for specific maps:
 #+begin_src elisp
-(evil-define-key 'normal global-map (kbd "<SPC>") leader-map)
+(defmacro set-local-leader-map (source-map key &rest args)
+  `(progn
+     (evil-define-key 'normal ,source-map (kbd "<SPC>")
+       (let ((map (make-sparse-keymap)))
+	 (set-keymap-parent map leader-map)
+	 (define-key map (kbd ,key) ,(append
+				     (list 'define-keymap)
+				     args))
+
+	 map))))
 #+end_src
 
-=== takes you to the most recent mark.
-#+begin_src elisp
-(evil-define-key 'normal global-map (kbd "=") 'pop-global-mark)
-#+end_src
-
-=-= and =_= use Avy for navigating within text.
-#+begin_src elisp
-(evil-define-key '(list normal motion visual) global-map (kbd "-") 'avy-goto-char)
-(evil-define-key '(list normal motion visual) global-map (kbd "_") 'avy-goto-line)
-#+end_src
-
-=S= is used to surround text while in Visual mode.
-#+begin_src elisp
-(evil-define-key 'visual global-map "S" 'surround-insert)
-#+end_src
-
-** Mode Specific Maps
-*** Setup
-This macro sets up a local leader keybind for a given map, mapped to =SPC M=.
-All the mode-specific config being locked behind the same keybind means I actually know what my code is doing :)
-#+begin_src elisp
-(defmacro set-local-leader-map (current-map new-map)
-  `(evil-define-key 'normal ,current-map (kbd "<SPC>")
-    (let ((map (make-sparse-keymap)))
-      (set-keymap-parent map leader-map)
-      (define-key map (kbd "m") ,new-map)
-      map
-      ))
-  )
-#+end_src
-
-This will turn this:
+Specifically, it constructs:
 #+begin_src elisp :tangle no
-(set-local-leader-map test-mode-map (define-keymap "a" #'test-function))
+  (set-local-leader-map test-mode-map "m" "a" #'test-function)
 #+end_src
 into:
 #+begin_src elisp :tangle no
-  (evil-define-key 'normal test-mode-map (kbd "<SPC>")
-    (let ((map (make-sparse-keymap)))
-      (set-keymap-parent map leader-map)
-      (define-key map (kbd "m") (define-keymap
-  				"a" #'test-function))
-      map))
+  (progn
+    (evil-define-key 'normal test-mode-map (kbd "<SPC>")
+      (let ((map (make-sparse-keymap)))
+        (set-keymap-parent map leader-map)
+        (define-key map (kbd "m") (define-keymap
+  				  "a" #'test-function))
+        map)))
 #+end_src
-which makes this a LOT easier to organise.
 
-*** Org Mode Map
+My favourite trick in there is using =append= to combine two lists - one list containing =define-keymap=, and the other containing the arguments, creating one list - =(define-keymap "a" #'test-function)=.
+
+
+***** Org Mode Leader Map
 Set keybinds for org mode - primarily just commands I use a lot.
 
 #+begin_src elisp
-(set-local-leader-map org-mode-map
-		      (define-keymap
+(set-local-leader-map org-mode-map "m"
 			"." #'consult-org-heading
-			"b" #'org-mark-ring-goto
-			"f" #'org-roam-node-find
-			"i" #'org-roam-node-insert
 			"l i" #'org-id-get-create
+			"i" #'org-roam-node-insert
+			"f" #'org-roam-node-find
 			"r" #'org-id-reload-all
-                  "h" (lambda() (interactive) (org-cycle-hide-drawers 'all))
+			"b" #'org-mark-ring-goto
 			))
+#+end_src
+
+*** Leader Key
+This makes the Leader key (=<SPC>=) activate the [[*Leader Map][Leader Map]].
+#+begin_src elisp
+(evil-define-key 'normal global-map (kbd "<SPC>") leader-map)
 #+end_src
