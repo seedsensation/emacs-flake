@@ -49,7 +49,7 @@ Otherwise, if the customizations file doesn't exist locally, copy it from git.
            (file-newer-than-file-p (expand-file-name "custom.el" dir)
           			       "~/.emacs.d/custom.el")
            (not (file-exists-p "~/.emacs.d/custom.el")))
-          (copy-file (expand-file-name "emacs-customizations.el" dir) "~/.emacs.d/custom.el" t)
+          (copy-file (expand-file-name "custom.el" dir) "~/.emacs.d/custom.el" t)
         (when (not (file-exists-p "~/.emacs.d/custom.el"))
           (copy-file "~/.emacs.d/custom.el" (expand-file-name "custom.el" dir) t))))
     (load "~/.emacs.d/custom.el")
