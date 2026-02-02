@@ -22,7 +22,6 @@ We'll set some basic configs here - relative line numbers, silencing sound effec
         warning-suppress-log-types '((files missing-lexbind-cookie)))
 #+end_src
 
-
 * File System Setup
 ** Repository Location
 First, we have to set where the Git repository is located.
@@ -144,12 +143,14 @@ To do that, I've written a macro that sets multiple hooks to activate =lsp-mode=
   ;; (lsp-attach-hook 'java-mode-hook 'python-mode-hook)
   ;;
   ;; output
-  ;; (add-hook 'java-mode-hook 'lsp-mode)
-  ;; (add-hook 'python-mode-hook 'lsp-mode)
+  ;; (add-hook 'java-mode-hook 'lsp)
+  ;; (add-hook 'python-mode-hook 'lsp)
 
   (defmacro lsp-attach-hook (&rest args)
-    `(progn ,@(mapcar #'(lambda (a) `(add-hook ,a 'lsp-mode)) args) t))
-  (lsp-attach-hook 'java-mode-hook 'lsp-mode-hook)
+    `(progn ,@(mapcar #'(lambda (a) `(add-hook ,a 'lsp)) args) t))
+
+  (lsp-attach-hook 'java-mode-hook
+  		   )
 #+end_src
 
 ** Text Mode
@@ -374,16 +375,17 @@ This map is for working with =lsp-mode=, =projectile= and =treemacs=.
 ***** Leader Map
 This map is the most important one - this map appears whenever you press Space while in Evil Mode, and defines every map that you can move to.
 #+begin_src elisp
-(defvar leader-map (define-keymap
-  "." #'find-file
-  "w" window-map
-  "d" config-map
-  "v" view-map
-  "b" buffer-map
-  "c" customize-map
-  "h" help-map
-  "/" #'avy-goto-char-2
-  ))
+  (defvar leader-map (define-keymap
+    "." #'find-file
+    "/" #'avy-goto-char-2
+    "b" buffer-map
+    "c" customize-map
+    "d" config-map
+    "h" help-map
+    "p" project-map
+    "v" view-map
+    "w" window-map
+    ))
 #+end_src
 
 **** Mode Specific Leader Maps
