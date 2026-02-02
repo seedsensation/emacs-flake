@@ -238,7 +238,6 @@ This function reloads all org IDs - good for resyncing the database.
 *** Disable ignored buffers
 #+begin_src elisp
   (setq aw-ignore-on nil)
-  (delq 'treemacs-mode aw-ignored-buffers)
 #+end_src
 * Keybinds
 ** Maps
