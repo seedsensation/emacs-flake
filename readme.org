@@ -33,25 +33,38 @@ If it's just pulled straight from the flake, leave it as nil.
 (setq emacs-flake-dir "~/projects/emacs-flake")
 #+end_src
 
+** Org Roam Files
+
 ** Customization File
-Our customisations are stored in =\~/.emacs.d/custom.el=.
+Our customisations are stored in =\~/emacs/custom.el=.
 To use them properly, every time Emacs launches, we check between our local customisations file and the one stored in the home file.
 
 If the locally stored file is newer than the one in the git repository, copy the new one to git.
 Otherwise, if the customizations file doesn't exist locally, copy it from git.
 
   #+begin_src elisp :tangle no
-    (setq custom-file "~/.emacs.d/custom.el")
+    (if (not (file-exists-p "~/emacs/custom.el"))
+      (progn
+        (if (not (file-directory-p "~/emacs"))
+    	(make-directory "~/emacs"))
+        (copy-file "~/.emacs.d/custom.el" "~/emacs/custom.el")))
 
-    (let ((dir (if emacs-flake-dir emacs-flake-dir "./")))
-      (if (or
-           (file-newer-than-file-p (expand-file-name "custom.el" dir)
-          			       "~/.emacs.d/custom.el")
-           (not (file-exists-p "~/.emacs.d/custom.el")))
-          (copy-file (expand-file-name "custom.el" dir) "~/.emacs.d/custom.el" t)
-        (when (not (file-exists-p "~/.emacs.d/custom.el"))
-          (copy-file "~/.emacs.d/custom.el" (expand-file-name "custom.el" dir) t))))
-    (load "~/.emacs.d/custom.el")
+    (setq custom-file "~/emacs/custom.el")
+
+        
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Old version of the code. more complicated. ignore.
+    ;;  but i'm keeping it around in case it's needed :)
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;    (let ((dir (if emacs-flake-dir emacs-flake-dir "./")))
+    ;;      (if (or
+    ;;           (file-newer-than-file-p (expand-file-name "custom.el" dir)
+    ;;          			       "~/.emacs.d/custom.el")
+    ;;           (not (file-exists-p "~/.emacs.d/custom.el")))
+    ;;          (copy-file (expand-file-name "custom.el" dir) "~/.emacs.d/custom.el" t)
+    ;;        (when (not (file-exists-p "~/.emacs.d/custom.el"))
+    ;;          (copy-file "~/.emacs.d/custom.el" (expand-file-name "custom.el" dir) t))))
+    ;;    (load "~/.emacs.d/custom.el")
 #+end_src
 
 * Appearance
