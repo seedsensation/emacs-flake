@@ -158,6 +158,16 @@ Enable =visual-line-mode= for all text buffers.
 #+begin_src elisp
 (add-hook 'text-mode-hook 'visual-line-mode)
 #+end_src
+** Java Mode
+Disable =indent-tabs-mode= specifically for =java-mode= so that it doesn't keep awkwardly indenting, when =format-all-mode= is doing all the work for me.
+#+begin_src elisp
+  (defun java-mode-hook-enable ()
+    (indent-tabs-mode 0)
+    (format-all-mode 1))
+
+  (add-hook 'java-mode-hook 'java-mode-hook-enable)
+#+end_src
+
 * Additional Functions
 ** Hide Drawers
 This hides the drawers under every heading in Org Mode.
@@ -245,6 +255,25 @@ This function reloads all org IDs - good for resyncing the database.
 This lets us use =TAB= to show/hide contents of headers in Org mode.
 #+begin_src elisp
   (evil-define-key 'normal org-mode-map (kbd "<TAB>") 'org-cycle)
+#+end_src
+*** Treemacs Mode Map
+Set up TAB and RET on =treemacs-mode=.
+This is usually blocked by =evil=, so we simply redefine it using =evil='s keybinding system.
+#+begin_src elisp
+  (evil-define-key 'normal treemacs-mode-map
+    (kbd "<TAB>") #'treemacs-TAB-action)
+
+  (evil-define-key 'normal treemacs-mode-map
+    (kbd "<RET>") #'treemacs-RET-action)
+#+end_src
+
+This hasn't seemed to do anything. Let's try defining it in a different way:
+#+begin_src elisp
+  (define-key treemacs-mode-map
+  	    (kbd "<TAB>") #'treemacs-TAB-action)
+
+  (define-key treemacs-mode-map
+  	    (kbd "<RET>") #'treemacs-RET-action)
 #+end_src
 ** Global Binds
 *** Navigation
