@@ -20,8 +20,7 @@ We'll set some basic configs here - relative line numbers, silencing sound effec
         completion-ignore-case t
         completion-styles '(basic substring partial-completion flex)
         warning-suppress-log-types '((files missing-lexbind-cookie))
-        custom-file "~/emacs/custom.el"
-        org-roam-directory "~/org/")
+        org-roam-directory "~/org")
 #+end_src
 
 * File System Setup
@@ -177,7 +176,9 @@ Disable =indent-tabs-mode= specifically for =java-mode= so that it doesn't keep 
 #+begin_src elisp
   (defun java-mode-hook-enable ()
     (indent-tabs-mode 0)
-    (format-all-mode 1))
+    (format-all-mode 1)
+    (setq format-all-formatters '(("Java" astyle)))
+    )
 
   (add-hook 'java-mode-hook 'java-mode-hook-enable)
 #+end_src
