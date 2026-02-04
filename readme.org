@@ -33,7 +33,6 @@ If it's just pulled straight from the flake, leave it as nil.
 (setq emacs-flake-dir "~/projects/emacs-flake")
 #+end_src
 
-** Org Roam Files
 
 ** Customization File
 Our customisations are stored in =\~/emacs/custom.el=.
@@ -282,11 +281,11 @@ This is usually blocked by =evil=, so we simply redefine it using =evil='s keybi
 
 This hasn't seemed to do anything. Let's try defining it in a different way:
 #+begin_src elisp
-  (define-key treemacs-mode-map
-  	    (kbd "<TAB>") #'treemacs-TAB-action)
+  ;;(define-key treemacs-mode-map
+  ;;	    (kbd "<TAB>") #'treemacs-TAB-action)
 
-  (define-key treemacs-mode-map
-  	    (kbd "<RET>") #'treemacs-RET-action)
+  ;;(define-key treemacs-mode-map
+  ;;	    (kbd "<RET>") #'treemacs-RET-action)
 #+end_src
 ** Global Binds
 *** Navigation
