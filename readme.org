@@ -20,7 +20,8 @@ We'll set some basic configs here - relative line numbers, silencing sound effec
         completion-ignore-case t
         completion-styles '(basic substring partial-completion flex)
         warning-suppress-log-types '((files missing-lexbind-cookie))
-        custom-file "~/emacs/custom.el")
+        custom-file "~/emacs/custom.el"
+        org-roam-directory "~/org/")
 #+end_src
 
 * File System Setup
