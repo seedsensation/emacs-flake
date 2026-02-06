@@ -42,7 +42,7 @@ To use them properly, every time Emacs launches, we check between our local cust
 If the locally stored file is newer than the one in the git repository, copy the new one to git.
 Otherwise, if the customizations file doesn't exist locally, copy it from git.
 
-  #+begin_src elisp :tangle no
+  #+begin_src elisp :tangle yes
     (if (not (file-exists-p "~/emacs/custom.el"))
       (progn
         (if (not (file-directory-p "~/emacs"))
