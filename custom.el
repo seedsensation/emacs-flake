@@ -47,8 +47,7 @@
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(org-roam-directory "/home/mercury/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
- '(safe-local-variable-values '((lexical-bindings . t)))
- '(truncate-lines t))
+ '(safe-local-variable-values '((lexical-bindings . t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

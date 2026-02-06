@@ -50,6 +50,7 @@ Otherwise, if the customizations file doesn't exist locally, copy it from git.
         (copy-file "~/.emacs.d/custom.el" "~/emacs/custom.el")))
 
     (setq custom-file "~/emacs/custom.el")
+    (load-file "~/emacs/custom.el")
 
         
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
