@@ -310,12 +310,14 @@ This hasn't seemed to do anything. Let's try defining it in a different way:
 This lets us set specific keybinds for when dealing with Corfu autocomplete.
 
 #+begin_src elisp
-  (define-keys 'corfu-map
+  (eval-after-load "corfu-mode"
+  (define-keys corfu-map
   	     ("C-n" #'corfu-next)
   	     ("C-p" #'corfu-previous)
   	     ("C-<return>" #'corfu-insert)
   	     ("<escape>" #'corfu-quit)
   	     ("M-l" #'corfu-show-location))
+  )
 #+end_src
 
 ** Global Binds
