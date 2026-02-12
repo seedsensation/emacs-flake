@@ -449,6 +449,7 @@ This map is the most important one - this map appears whenever you press Space w
     "b" buffer-map
     "c" customize-map
     "d" config-map
+    "f" file-map
     "h" help-map
     "p" project-map
     "v" view-map
