@@ -314,15 +314,17 @@ This lets us set specific keybinds for when dealing with Corfu autocomplete.
 #+begin_src elisp
   (define-keys corfu-map
   	     ((kbd "M-n") #'corfu-next)
+  	     ((kbd "<backtab>") #'corfu-previous)
   	     ((kbd "<TAB>") #'corfu-next)
   	     ((kbd "M-p") #'corfu-previous)
   	     ((kbd "M-<RET>") #'corfu-insert)
-  	     ((kbd "<RET>") nil)
+  	     ((kbd "C-c") #'corfu-insert)
+  	     ;((kbd "<RET>") nil)
   	     ((kbd "<escape>") #'corfu-quit)
   	     ((kbd "M-l") #'corfu-show-location))
-  (define-key corfu-mode-map
+  (define-key prog-mode-map
   	    ;"M-<tab>" #'corfu-complete
-  	    "C-M-i" #'corfu-complete)
+  	    (kbd "<backtab>") #'completion-at-point)
 #+end_src
 
 ** Global Binds
