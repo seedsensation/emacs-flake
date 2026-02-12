@@ -38,8 +38,12 @@
      ("_Beancount" bean-format) ("_Caddyfile" caddy-fmt)
      ("_Flow" prettier) ("_Gleam" gleam) ("_Ledger" ledger-mode)
      ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
- '(format-all-formatters '(("Java" astyle)))
+ '(format-all-formatters '(("Java" astyle)) t)
  '(initial-buffer-choice "~/org/contents.org")
+ '(lsp-java-vmargs
+   '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
+     "-XX:AdaptiveSizePolicyWeight=90"
+     "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
  '(org-enforce-todo-dependencies t)
  '(org-format-latex-options
    '(:foreground default :background default :scale 2.25 :html-foreground
@@ -47,7 +51,9 @@
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(org-roam-directory "/home/mercury/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
- '(safe-local-variable-values '((lexical-bindings . t))))
+ '(recentf-mode t)
+ '(safe-local-variable-values '((lexical-bindings . t)))
+ '(truncate-lines t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

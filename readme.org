@@ -103,6 +103,7 @@ We set all of the basic modes, of course.
   (tool-bar-mode 0)
   (scroll-bar-mode 0)
   (indent-tabs-mode 0)
+  (recentf-mode 1)
 #+end_src
 
 ** Evil
@@ -144,7 +145,7 @@ This hook enables line numbers, formatting and autocomplete in all programming b
   (defun prog-mode-enable ()
     (display-line-numbers-mode 1)
     (format-all-mode)
-    (company-mode))
+    (corfu-mode))
   (add-hook 'prog-mode-hook 'prog-mode-enable)
 #+end_src
 ** LSP Auto-Enable
