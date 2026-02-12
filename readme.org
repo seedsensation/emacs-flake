@@ -249,6 +249,14 @@ These functions are used for the =SPC v= and =SPC h= commands in the [[*Window M
 #+end_src
 
 
+** Define Keys
+This macro is for defining multiple keys for one map at once.
+It expands a list of (key,val) pairs into separate =(define-key)= statements.
+
+#+begin_src 
+  (defmacro define-keys (dest-map &rest args)
+    `(progn ,@(mapcar #'(lambda (a) (append (list 'define-key dest-map) a )) args) t))
+#+end_src
 
 ** Org ID Reload All
 This function reloads all org IDs - good for resyncing the database.
@@ -292,6 +300,25 @@ This hasn't seemed to do anything. Let's try defining it in a different way:
   ;;(define-key treemacs-mode-map
   ;;	    (kbd "<RET>") #'treemacs-RET-action)
 #+end_src
+*** Rustic Mode Map
+**** Rustic Popups Map
+#+begin_src elisp
+  (evil-define-key 'normal rustic-popup-mode-map (kbd "q") #'delete-window)
+#+end_src
+
+*** Corfu Mode Map
+This lets us set specific keybinds for when dealing with Corfu autocomplete.
+
+#+begin_src elisp
+  (eval-after-load "corfu-mode"
+    (define-keys 'corfu-map
+  	      ("C-n" #'corfu-next)
+  	      ("C-p" #'corfu-previous)
+  	      ("C-<return>" #'corfu-insert)
+  	      ("<escape>" #'corfu-quit)
+  	      ("M-l" #'corfu-show-location)))
+#+end_src
+
 ** Global Binds
 *** Navigation
 **** Avy
