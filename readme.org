@@ -96,6 +96,7 @@ We set all of the basic modes, of course.
   (evil-mode 1)
   (vertico-mode 1)
   (ivy-mode 1)
+  (global-corfu-mode 1)
   (ivy-prescient-mode 1)
   (org-roam-db-autosync-mode 1)
   (which-key-mode 1)
@@ -144,8 +145,8 @@ This hook enables line numbers, formatting and autocomplete in all programming b
 #+begin_src elisp
   (defun prog-mode-enable ()
     (display-line-numbers-mode 1)
-    (format-all-mode)
-    (corfu-mode))
+    (format-all-mode 1)
+    (corfu-mode 1))
   (add-hook 'prog-mode-hook 'prog-mode-enable)
 #+end_src
 ** LSP Auto-Enable
@@ -248,7 +249,6 @@ These functions are used for the =SPC v= and =SPC h= commands in the [[*Window M
 
 #+end_src
 
-
 ** Define Keys
 This macro is for defining multiple keys for one map at once.
 It expands a list of (key,val) pairs into separate =(define-key)= statements.
@@ -274,6 +274,8 @@ This function reloads all org IDs - good for resyncing the database.
 #+begin_src elisp
   (setq aw-ignore-on nil)
 #+end_src
+** Corfu
+
 * Keybinds
 ** Maps
 *** Org Mode Map
@@ -310,14 +312,16 @@ This hasn't seemed to do anything. Let's try defining it in a different way:
 This lets us set specific keybinds for when dealing with Corfu autocomplete.
 
 #+begin_src elisp
-  (eval-after-load "corfu-mode"
   (define-keys corfu-map
-  	     ("C-n" #'corfu-next)
-  	     ("C-p" #'corfu-previous)
-  	     ("C-<return>" #'corfu-insert)
-  	     ("<escape>" #'corfu-quit)
-  	     ("M-l" #'corfu-show-location))
-  )
+  	     ((kbd "M-n") #'corfu-next)
+  	     ((kbd "<TAB>") #'corfu-next)
+  	     ((kbd "M-p") #'corfu-previous)
+  	     ((kbd "M-<RET>") #'corfu-insert)
+  	     ((kbd "<RET>") nil)
+  	     ((kbd "<escape>") #'corfu-quit)
+  	     ((kbd "M-l") #'corfu-show-location))
+  (define-key corfu-mode-map
+  	    "M-<tab>" #'corfu-complete)
 #+end_src
 
 ** Global Binds
@@ -454,16 +458,20 @@ This map is for working with =lsp-mode=, =projectile= and =treemacs=.
 #+end_src
 
 ***** File Maps
-****** File Map Setup
+This map is for easily navigating between files.
 #+begin_src elisp
   (defvar file-map (define-keymap
 #+end_src
-****** Recent Files
+
+Go to recent files with =SPC f r=.
 #+begin_src elisp
   "r" #'recentf
 #+end_src
 
-****** File Map Closing
+#+begin_src elisp
+  "f" #'format-all-buffer
+#+end_src
+
 #+begin_src elisp
   ))
 #+end_src
