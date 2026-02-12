@@ -321,7 +321,8 @@ This lets us set specific keybinds for when dealing with Corfu autocomplete.
   	     ((kbd "<escape>") #'corfu-quit)
   	     ((kbd "M-l") #'corfu-show-location))
   (define-key corfu-mode-map
-  	    "M-<tab>" #'corfu-complete)
+  	    ;"M-<tab>" #'corfu-complete
+  	    "C-M-i" #'corfu-complete)
 #+end_src
 
 ** Global Binds
