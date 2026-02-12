@@ -303,6 +303,7 @@ These allow us to move around files much quicker.
 (evil-define-key '(list normal motion visual) global-map (kbd "_") 'avy-goto-line)
 #+end_src
 
+
 **** Marks
 This keybind takes you to the most recent mark:
 #+begin_src elisp
@@ -422,6 +423,21 @@ This map is for working with =lsp-mode=, =projectile= and =treemacs=.
   			    (treemacs)
   			    (lsp))
   		      ))
+#+end_src
+
+***** File Maps
+****** File Map Setup
+#+begin_src elisp
+  (defvar file-map (define-keymap
+#+end_src
+****** Recent Files
+#+begin_src elisp
+  "r" #'recentf
+#+end_src
+
+****** File Map Closing
+#+begin_src elisp
+  ))
 #+end_src
 
 ***** Leader Map
