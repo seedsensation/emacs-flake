@@ -253,7 +253,7 @@ These functions are used for the =SPC v= and =SPC h= commands in the [[*Window M
 This macro is for defining multiple keys for one map at once.
 It expands a list of (key,val) pairs into separate =(define-key)= statements.
 
-#+begin_src 
+#+begin_src elisp
   (defmacro define-keys (dest-map &rest args)
     `(progn ,@(mapcar #'(lambda (a) (append (list 'define-key dest-map) a )) args) t))
 #+end_src
@@ -310,13 +310,12 @@ This hasn't seemed to do anything. Let's try defining it in a different way:
 This lets us set specific keybinds for when dealing with Corfu autocomplete.
 
 #+begin_src elisp
-  (eval-after-load "corfu-mode"
-    (define-keys 'corfu-map
-  	      ("C-n" #'corfu-next)
-  	      ("C-p" #'corfu-previous)
-  	      ("C-<return>" #'corfu-insert)
-  	      ("<escape>" #'corfu-quit)
-  	      ("M-l" #'corfu-show-location)))
+  (define-keys 'corfu-map
+  	     ("C-n" #'corfu-next)
+  	     ("C-p" #'corfu-previous)
+  	     ("C-<return>" #'corfu-insert)
+  	     ("<escape>" #'corfu-quit)
+  	     ("M-l" #'corfu-show-location))
 #+end_src
 
 ** Global Binds
