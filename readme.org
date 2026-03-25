@@ -131,7 +131,7 @@ Set the process for generating previews:
 ** C Mode
 We'll add a new C style, and set that as the default:
 #+begin_src elisp
-  (c-add-style "default" (list "user" '(c-basic-offset . 4)))
+  (c-add-style "default" (list "gnu" '(c-basic-offset . 4)))
 #+end_src
 * Hooks
 ** Org Mode

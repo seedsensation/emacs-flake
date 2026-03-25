@@ -4,10 +4,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(aw-ignore-on t)
  '(c-default-style
    '((c++-mode . "default") (java-mode . "java") (awk-mode . "awk")
      (other . "gnu")))
  '(corfu-auto t)
+ '(evil-auto-indent t)
  '(format-all-default-formatters
    '(("Assembly" asmfmt) ("ATS" atsfmt) ("Bazel" buildifier)
      ("BibTeX" emacs-bibtex) ("C" clang-format) ("C#" csharpier)
@@ -45,6 +47,9 @@
  '(format-all-formatters '(("Java" astyle) ("Rust" rustfmt)) t)
  '(global-corfu-mode t)
  '(initial-buffer-choice "~/org/contents.org")
+ '(lsp-clangd-binary-path
+   "/nix/store/kggymrkys7zixc07ll86jg7bb97h1rrb-clang-tools-21.1.8/bin/clangd")
+ '(lsp-clients-clangd-executable nil)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"
