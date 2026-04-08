@@ -44,12 +44,13 @@
      ("_Beancount" bean-format) ("_Caddyfile" caddy-fmt)
      ("_Flow" prettier) ("_Gleam" gleam) ("_Ledger" ledger-mode)
      ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
- '(format-all-formatters '(("Java" astyle) ("Rust" rustfmt)) t)
+ '(format-all-formatters '(("Java" astyle) ("Rust" rustfmt) ("C++" clang-format)) t)
  '(global-corfu-mode t)
  '(initial-buffer-choice "~/org/contents.org")
  '(lsp-clangd-binary-path
    "/nix/store/kggymrkys7zixc07ll86jg7bb97h1rrb-clang-tools-21.1.8/bin/clangd")
  '(lsp-clients-clangd-executable nil)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"

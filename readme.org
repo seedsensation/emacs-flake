@@ -171,6 +171,7 @@ To do that, I've written a macro that sets multiple hooks to activate =lsp-mode=
     `(progn ,@(mapcar #'(lambda (a) `(add-hook ,a 'lsp)) args) t))
 
   (lsp-attach-hook 'java-mode-hook
+  		 'c++-mode-hook
   		   )
 #+end_src
 
