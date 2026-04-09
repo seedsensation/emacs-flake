@@ -288,6 +288,7 @@ This function reloads all org IDs - good for resyncing the database.
 This lets us use =TAB= to show/hide contents of headers in Org mode.
 #+begin_src elisp
   (evil-define-key 'normal org-mode-map (kbd "<TAB>") 'org-cycle)
+  (define-key org-mode-map (kbd "C-c ,") #'org-insert-structure-template)
 #+end_src
 *** Treemacs Mode Map
 Set up TAB and RET on =treemacs-mode=.
