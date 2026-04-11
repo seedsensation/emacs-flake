@@ -46,22 +46,24 @@
      ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
  '(format-all-formatters '(("Java" astyle) ("Rust" rustfmt) ("C++" clang-format)) t)
  '(global-corfu-mode t)
- '(initial-buffer-choice "~/org/contents.org")
- '(lsp-clangd-binary-path
-   "/nix/store/kggymrkys7zixc07ll86jg7bb97h1rrb-clang-tools-21.1.8/bin/clangd")
- '(lsp-clients-clangd-executable nil)
- '(lsp-enable-on-type-formatting nil)
+ '(initial-buffer-choice 'multi-vterm)
+ '(ivy-use-selectable-prompt t)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"
      "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
+ '(org-babel-load-languages '((emacs-lisp . t) (python . t) (C . t) (shell . t)))
  '(org-confirm-babel-evaluate nil)
  '(org-enforce-todo-dependencies t)
  '(org-format-latex-options
    '(:foreground default :background default :scale 2.25 :html-foreground
 		 "Black" :html-background "Transparent" :html-scale
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
- '(org-roam-directory "/home/mercury/org/")
+ '(org-roam-capture-templates
+   '(("d" "default" plain "%?" :target
+      (file+head "nodes/${slug}.org" "#+title: ${title}\12")
+      :unnarrowed t)))
+ '(org-roam-directory "~/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
  '(recentf-mode t)
  '(safe-local-variable-values
@@ -77,3 +79,4 @@
  '(default ((t (:inherit nil :extend nil :stipple nil :background "#282828" :foreground "#ebdbb2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 158 :width normal :foundry "    " :family "Maple Mono"))))
  '(ivy-current-match ((t (:extend t :foreground "#ffffc8" :underline nil :slant italic :weight bold))))
  '(org-level-4 ((t (:extend nil :foreground "medium spring green" :weight normal)))))
+
