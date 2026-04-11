@@ -362,6 +362,7 @@ This sets a keybind accessible everywhere to use Ace Window for navigating betwe
 This makes the buffer list easily accessible:
 #+begin_src elisp
   (keymap-global-set "C-x C-<up>" 'electric-buffer-list)
+  (keymap-global-set "C-x <up>" 'electric-buffer-list)
   (keymap-global-set "C-x C-b" 'electric-buffer-list)
 #+end_src
 
