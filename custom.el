@@ -4,7 +4,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-ignore-on t)
+ '(aw-ignore-on t t)
  '(c-default-style
    '((c++-mode . "default") (java-mode . "java") (awk-mode . "awk")
      (other . "gnu")))
@@ -70,7 +70,8 @@
    '((eval progn (org-babel-goto-named-src-block "startup")
 	   (org-babel-execute-src-block))
      (lexical-bindings . t)))
- '(truncate-lines t))
+ '(truncate-lines t)
+ '(warning-suppress-log-types '((ox-latex) (files missing-lexbind-cookie))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
