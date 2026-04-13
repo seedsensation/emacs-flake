@@ -61,7 +61,7 @@
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(org-roam-capture-templates
    '(("d" "default" plain "%?" :target
-      (file+head "nodes/${slug}.org" "#+title: ${title}\12")
+      (file+head "nodes/bin/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\12")
       :unnarrowed t)))
  '(org-roam-directory "~/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")

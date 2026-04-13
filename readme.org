@@ -292,6 +292,9 @@ This lets us use =TAB= to show/hide contents of headers in Org mode.
 #+end_src
 
 This is for org-roam keybinds - specifically, so that I can easily add links inline while typing. It uses =C-c C-r= as the prefix.
+
+
+
 #+begin_src elisp
   (defvar org-roam-map (define-keymap
   		       "l" #'org-roam-node-insert
@@ -397,6 +400,11 @@ The best option seems to be using =use-package= like so:
 This lets us use =S= to surround text while in Visual mode.
 #+begin_src elisp
 (evil-define-key 'visual global-map "S" 'surround-insert)
+#+end_src
+
+**** Enable Marks While Typing
+#+begin_src elisp
+  (evil-define-key 'insert global-map (kbd "C-@") 'set-mark-command)
 #+end_src
 
 *** Leader Maps
