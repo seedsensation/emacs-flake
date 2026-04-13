@@ -1,5 +1,5 @@
 #+title: Emacs Config
-#+PROPERTY: header-args :tangle yes
+#+PROPERTY: header-args :tangle yes :results silent
 * Initial Configuration
 ** Lexical Bindings
 #+begin_src elisp
@@ -290,6 +290,19 @@ This lets us use =TAB= to show/hide contents of headers in Org mode.
   (evil-define-key 'normal org-mode-map (kbd "<TAB>") 'org-cycle)
   (define-key org-mode-map (kbd "C-c ,") #'org-insert-structure-template)
 #+end_src
+
+This is for org-roam keybinds - specifically, so that I can easily add links inline while typing. It uses =C-c C-r= as the prefix.
+#+begin_src elisp
+  (defvar org-roam-map (define-keymap
+  		       "l" #'org-roam-node-insert
+  		       "n" #'org-id-get-create
+  		       "v" #'org-roam-node-visit
+  		       ))
+  		       
+
+  (define-key org-mode-map (kbd "C-c C-r") org-roam-map)
+#+end_src
+
 *** Treemacs Mode Map
 Set up TAB and RET on =treemacs-mode=.
 This is usually blocked by =evil=, so we simply redefine it using =evil='s keybinding system.
@@ -461,6 +474,7 @@ This map is for working with =lsp-mode=, =projectile= and =treemacs=.
   			    (projectile-switch-project))
   		      "l" #'lsp
   		      "v" #'vterm
+  		      "V" #'multi-vterm
   		      "s" (lambda () (interactive)
   			    (lsp-treemacs-errors-list)
   			    (treemacs)
