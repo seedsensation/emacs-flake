@@ -274,6 +274,15 @@ This function reloads all org IDs - good for resyncing the database.
     (org-roam-db-sync))
 #+end_src
 
+** LSP Code Actions
+#+begin_src elisp
+  (define-key lsp-mode-map (kbd "C-c C-j C-j") #'lsp-execute-code-action)
+#+end_src
+** Show Keybinds
+#+begin_src elisp
+  (defun show-keybinds ()(interactive)
+         (momentary-string-display (with-temp-buffer (setq org-mode t)(insert-file-contents "~/org/important-keybinds.org")  (buffer-string)) (point)))
+#+end_src
 * Package Config
 ** Ace Window
 *** Disable ignored buffers
@@ -437,6 +446,7 @@ This map is for easily accessing config files.
   		     "c" (lambda () (interactive) (find-file "~/projects/emacs-flake/readme.org"))
   		     "k" (lambda () (interactive) (find-file "~/projects/emacs-flake/readme.org"))
   		     "d" (lambda () (interactive) (dired "./"))
+  		     "l" (lambda () (interactive) (show-keybinds))
   		     ))
   #+end_src
 
@@ -579,5 +589,7 @@ Set keybinds for org mode - primarily just commands I use a lot.
 *** Leader Key
 This makes the Leader key (=<SPC>=) activate the [[*Leader Map][Leader Map]].
 #+begin_src elisp
-(evil-define-key 'normal global-map (kbd "<SPC>") leader-map)
+  (evil-define-key 'normal global-map (kbd "<SPC>") leader-map)
+  (define-key global-map (kbd "C-c C-SPC") leader-map)
+  (define-key global-map (kbd "C-c SPC") leader-map)
 #+end_src

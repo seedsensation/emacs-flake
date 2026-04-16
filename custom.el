@@ -4,7 +4,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-ignore-on t t)
+ '(aw-ignore-on t)
  '(c-default-style
    '((c++-mode . "default") (java-mode . "java") (awk-mode . "awk")
      (other . "gnu")))
@@ -48,10 +48,13 @@
  '(global-corfu-mode t)
  '(initial-buffer-choice 'multi-vterm)
  '(ivy-use-selectable-prompt t)
+ '(lsp-auto-execute-action nil)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"
      "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
+ '(lsp-keymap-prefix "C-c C-j")
+ '(org-agenda-files nil)
  '(org-babel-load-languages '((emacs-lisp . t) (python . t) (C . t) (shell . t)))
  '(org-confirm-babel-evaluate nil)
  '(org-enforce-todo-dependencies t)
@@ -61,7 +64,8 @@
 		 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(org-roam-capture-templates
    '(("d" "default" plain "%?" :target
-      (file+head "nodes/bin/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\12")
+      (file+head "nodes/bin/%<%Y%m%d%H%M%S>-${slug}.org"
+		 "#+title: ${title}\12")
       :unnarrowed t)))
  '(org-roam-directory "~/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
