@@ -48,7 +48,7 @@
  '(global-corfu-mode t)
  '(initial-buffer-choice 'multi-vterm)
  '(ivy-use-selectable-prompt t)
- '(lsp-auto-execute-action nil)
+ ;'(lsp-auto-execute-action nil)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"

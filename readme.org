@@ -68,6 +68,13 @@ Otherwise, if the customizations file doesn't exist locally, copy it from git.
     ;;    (load "~/.emacs.d/custom.el")
 #+end_src
 
+  
+** LSP Mode Setup
+Sets up LSP from scratch, in case variables are missing.
+#+begin_src elisp
+  (lsp)
+#+end_src
+
 * Appearance
 ** Theme
 Set the theme to Gruvbox.
