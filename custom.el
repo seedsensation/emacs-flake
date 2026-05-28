@@ -4,14 +4,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-ignore-on t)
+ '(aw-ignore-on t t)
  '(c-default-style
    '((c++-mode . "default") (java-mode . "java") (awk-mode . "awk")
      (other . "gnu")))
  '(corfu-auto t)
+ '(ein:output-area-inlined-images t)
  '(evil-auto-indent t)
  '(format-all-default-formatters
-   '(("Assembly" asmfmt) ("ATS" atsfmt) ("Bazel" buildifier)
+   '(("Assembly" nasmfmt) ("ATS" atsfmt) ("Bazel" buildifier)
      ("BibTeX" emacs-bibtex) ("C" clang-format) ("C#" csharpier)
      ("C++" clang-format) ("Cabal Config" cabal-fmt)
      ("Clojure" zprint) ("CMake" cmake-format) ("Crystal" crystal)
@@ -44,11 +45,17 @@
      ("_Beancount" bean-format) ("_Caddyfile" caddy-fmt)
      ("_Flow" prettier) ("_Gleam" gleam) ("_Ledger" ledger-mode)
      ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
- '(format-all-formatters '(("Java" astyle) ("Rust" rustfmt) ("C++" clang-format)) t)
+ '(format-all-formatters
+   '(("Java" astyle) ("Rust" rustfmt) ("C++" clang-format) ("Nix" nixfmt)
+     ("Assembly" nasmfmt)) t)
  '(global-corfu-mode t)
  '(initial-buffer-choice 'multi-vterm)
+ '(initial-major-mode 'org-mode)
+ '(initial-scratch-message nil)
  '(ivy-use-selectable-prompt t)
- ;'(lsp-auto-execute-action nil)
+ '(lsp-auto-execute-action nil)
+ '(lsp-clangd-binary-path "/run/current-system/sw/bin/clangd")
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-java-vmargs
    '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
      "-XX:AdaptiveSizePolicyWeight=90"
@@ -69,6 +76,15 @@
       :unnarrowed t)))
  '(org-roam-directory "~/org/")
  '(org-roam-extract-new-file-path "nodes/${slug}.org")
+ '(package-selected-packages
+   '(cmake-mode consult corfu-terminal doxymacs ein emacs-everywhere
+		envrc flycheck flymake format-all fzf gdscript-mode
+		git-gutter gruvbox-theme ivy-prescient jupyter
+		lsp-java lsp-ui lua-mode magit marginalia multi-vterm
+		nix-mode orderless org-fragtog org-roam-timestamps
+		org-roam-ui ox-gfm pdf-tools projectile rustic
+		smartparens sqlite3 surround treemacs-evil vertico
+		yaml-mode))
  '(recentf-mode t)
  '(safe-local-variable-values
    '((eval progn (org-babel-goto-named-src-block "startup")
@@ -84,4 +100,3 @@
  '(default ((t (:inherit nil :extend nil :stipple nil :background "#282828" :foreground "#ebdbb2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 158 :width normal :foundry "    " :family "Maple Mono"))))
  '(ivy-current-match ((t (:extend t :foreground "#ffffc8" :underline nil :slant italic :weight bold))))
  '(org-level-4 ((t (:extend nil :foreground "medium spring green" :weight normal)))))
-
