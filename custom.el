@@ -61,10 +61,14 @@
      "-XX:AdaptiveSizePolicyWeight=90"
      "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms100m"))
  '(lsp-keymap-prefix "C-c C-j")
+ '(markdown-enable-html nil)
+ '(markdown-hide-urls t)
  '(org-agenda-files nil)
  '(org-babel-load-languages '((emacs-lisp . t) (python . t) (C . t) (shell . t)))
  '(org-confirm-babel-evaluate nil)
  '(org-enforce-todo-dependencies t)
+ '(org-export-with-tags nil)
+ '(org-export-with-toc nil)
  '(org-format-latex-options
    '(:foreground default :background default :scale 2.25 :html-foreground
 		 "Black" :html-background "Transparent" :html-scale
